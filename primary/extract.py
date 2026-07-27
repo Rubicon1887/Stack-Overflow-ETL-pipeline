@@ -12,7 +12,7 @@ load_dotenv()
 api_key=os.getenv('STACK_API_KEY')
 bucket_name=os.getenv('S3_BUCKET_NAME')
 
-def fetch_yesterdays_questions(tags): # I might not need start_date and end_date
+def fetch_yesterdays_questions(tags):
     
     SITE=StackAPI('stackoverflow',key=api_key)
     SITE.page_size=100
