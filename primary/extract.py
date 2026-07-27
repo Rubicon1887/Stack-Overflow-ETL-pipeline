@@ -85,7 +85,8 @@ def upload_to_s3(filepath,tags,day0):
 def fetch_save_upload():
 
     tags='python'
-    day0=datetime.now(timezone.utc).date() # or date(year,month,day)
+    day0=datetime.now(timezone.utc).date()-timedelta(days=1) # this is the date for which you want to fetch, save, and upload questions
+    # day0=date(year,month,day)
 
     qs=fetch_1days_questions(tags,day0)
     filepath=save_raw_questions(qs,tags,day0)
