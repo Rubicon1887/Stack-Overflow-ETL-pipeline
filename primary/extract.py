@@ -18,46 +18,53 @@ SITE.max_pages=15
 
 client=boto3.client('s3')
 
-def fetch_1days_questions(tags,day0): # I want the choice between day 0 and yesterday to be made BEFORE these 3 methods are called, inside the driver code.
+class extract:
 
-    day1=day0+timedelta(days=1)
+    def __init__(self,day0,backfill=False):
 
-    fromdate=int(datetime.combine(day0,time.min,tzinfo=timezone.utc).timestamp())
-    todate=int(datetime.combine(day1,time.min,tzinfo=timezone.utc).timestamp())
+        self.day0=day0
+        self.backfill=backfill
+    
+    def fetch_1days_questions(self,tags):
 
-    print(colored(f'1 - Fetching Stack Overflow questions from {day0} tagged with {tags}','yellow'))
-    qs=SITE.fetch('questions',fromdate=fromdate,todate=todate,tagged=tags)
-    print(colored(f'2 - Successfully fetched {len(qs['items'])} questions','green'))
+        day1=self.day0+timedelta(days=1)
 
-    return qs
+        fromdate=int(datetime.combine(self.day0,time.min,tzinfo=timezone.utc).timestamp())
+        todate=int(datetime.combine(day1,time.min,tzinfo=timezone.utc).timestamp())
 
-def save_raw_questions(qs,tags,day0):
+        if not self.backfill: print(colored(f'1 - Fetching Stack Overflow questions from {self.day0} tagged with {tags}','yellow'))
+        qs=SITE.fetch('questions',fromdate=fromdate,todate=todate,tagged=tags)
+        if not self.backfill: print(colored(f'2 - Successfully fetched {len(qs['items'])} questions','green'))
 
-    path=Path(
-        r'C:\Users\athar\Documents\GitHub\personal project\Stack Overflow ETL pipeline\S3 data',
-        f'{day0.year}',
-        f'{day0.month:02d}',
-        f'{day0.day:02d}'
-    )
+        return qs
 
-    path.mkdir(parents=True,exist_ok=True)
-    filepath=path/f'{tags}_questions.json'
+    def save_raw_questions(self,qs,tags):
 
-    with open(filepath,'w',encoding='utf-8') as f:
-        json.dump(qs,f,indent=2)
-    print(colored(f'3 - Saved {day0} data to {filepath}','blue'))
+        path=Path(
+            r'C:\Users\athar\Documents\GitHub\personal project\Stack Overflow ETL pipeline\S3 data',
+            f'{self.day0.year}',
+            f'{self.day0.month:02d}',
+            f'{self.day0.day:02d}'
+        )
 
-    return filepath
+        path.mkdir(parents=True,exist_ok=True)
+        filepath=path/f'{tags}_questions.json'
 
-def upload_to_s3(filepath,tags,day0):
+        with open(filepath,'w',encoding='utf-8') as f:
+            json.dump(qs,f,indent=2)
+        if not self.backfill: print(colored(f'3 - Saved {self.day0} data to {filepath}','blue'))
 
-    key=(
-        f'raw/'
-        f'{day0.year}/'
-        f'{day0.month:02d}/'
-        f'{day0.day:02d}/'
-        f'{tags}_questions.json'
-    )
+        return filepath
 
-    client.upload_file(filepath,bucket_name,key)
-    print(colored(f'4 - Uploaded {day0} file to s3://{bucket_name}/{key}','magenta'))
+    def upload_to_s3(self,filepath,tags):
+
+        key=(
+            f'raw/'
+            f'{self.day0.year}/'
+            f'{self.day0.month:02d}/'
+            f'{self.day0.day:02d}/'
+            f'{tags}_questions.json'
+        )
+
+        client.upload_file(filepath,bucket_name,key)
+        if not self.backfill: print(colored(f'4 - Uploaded {self.day0} file to s3://{bucket_name}/{key}','magenta'))
