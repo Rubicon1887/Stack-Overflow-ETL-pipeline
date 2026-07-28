@@ -15,20 +15,11 @@ from primary.extract import fetch_1days_questions,save_raw_questions,upload_to_s
 def fetch_save_upload():
 
     tags='python'
-    start_date=date(2026,7,5)
-    end_date=date(2026,7,10)
+    day0=datetime.now(timezone.utc).date()-timedelta(days=1) # yesterday
 
-    current=start_date
-    while current<=end_date:
-
-        qs=fetch_1days_questions(tags,day0=current)
-        filepath=save_raw_questions(qs,tags,day0=current)
-        upload_to_s3(filepath,tags,day0=current)
-
-        current+=timedelta(days=1)
-
+    qs=fetch_1days_questions(tags,day0)
+    filepath=save_raw_questions(qs,tags,day0)
+    upload_to_s3(filepath,tags,day0)
 
 if __name__=='__main__':
     fetch_save_upload()
-
-# hide print statements for backfills

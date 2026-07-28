@@ -61,19 +61,3 @@ def upload_to_s3(filepath,tags,day0):
 
     client.upload_file(filepath,bucket_name,key)
     print(colored(f'4 - Uploaded {day0} file to s3://{bucket_name}/{key}','magenta'))
-
-def fetch_save_upload():
-
-    tags='python'
-    day0=datetime.now(timezone.utc).date()-timedelta(days=1) # this is the date for which you want to fetch, save, and upload questions
-    # day0=date(year,month,day)
-
-    qs=fetch_1days_questions(tags,day0)
-    filepath=save_raw_questions(qs,tags,day0)
-    upload_to_s3(filepath,tags,day0)
-
-
-if __name__=='__main__':
-    fetch_save_upload()
-
-# the next step is to create a loop to iterate through all days in the backfill period and run fetch_save_upload in it. This should be in the backfill.py script
