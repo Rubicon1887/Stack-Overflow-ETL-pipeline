@@ -25,26 +25,6 @@ def fetch_1days_questions(tags,day0): # I want the choice between day 0 and yest
     fromdate=int(datetime.combine(day0,time.min,tzinfo=timezone.utc).timestamp())
     todate=int(datetime.combine(day1,time.min,tzinfo=timezone.utc).timestamp())
 
-    # if day1 is None and day0 is None: # yesterday's questions
-        
-    #     today=datetime.now(timezone.utc).date()
-    #     yesterday=today-timedelta(days=1)
-
-    #     fromdate=int(datetime.combine(yesterday,time.min,tzinfo=timezone.utc).timestamp())
-    #     todate=int(datetime.combine(today,time.min,tzinfo=timezone.utc).timestamp())
-
-    #     print(colored(f'1 - Fetching Stack Overflow questions from {yesterday} tagged with {tags}','yellow'))
-
-    # elif day1 is not None and day0 is None: # questions for a day between data dump and yesterday
-
-    #     fromdate=int(datetime.combine(day0,time.min,tzinfo=timezone.utc).timestamp())
-    #     todate=int(datetime.combine(day1,time.min,tzinfo=timezone.utc).timestamp())
-
-    #     print(colored(f'1 - Fetching Stack Overflow questions from {day0} tagged with {tags}','yellow'))
-
-    # else:
-    #     raise ValueError('Neither or both of day1 and day0 must be None')
-
     print(colored(f'1 - Fetching Stack Overflow questions from {day0} tagged with {tags}','yellow'))
     qs=SITE.fetch('questions',fromdate=fromdate,todate=todate,tagged=tags)
     print(colored(f'2 - Successfully fetched {len(qs['items'])} questions','green'))
@@ -95,3 +75,5 @@ def fetch_save_upload():
 
 if __name__=='__main__':
     fetch_save_upload()
+
+# the next step is to create a loop to iterate through all days in the backfill period and run fetch_save_upload in it. This should be in the backfill.py script
