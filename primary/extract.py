@@ -68,4 +68,8 @@ class Extract:
         )
 
         self.client.upload_file(filepath,bucket_name,key)
-        if not self.backfill: print(colored(f'4 - Uploaded {self.day0} file to s3://{bucket_name}/{key}','magenta')) # may wanna print tag somewhere
+        if not self.backfill: print(colored(f'4 - Uploaded {self.day0} file to s3://{bucket_name}/{key}','magenta')) 
+
+# may wanna print tag somewhere
+# add functionality to add questions with other tags
+# try backfilling for a month, then maybe a year, account for multiple programming languages
