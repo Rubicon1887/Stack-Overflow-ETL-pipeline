@@ -10,8 +10,7 @@ import boto3
 import sys
 sys.path.append('./')
 
-from primary.extract import fetch_1days_questions,save_raw_questions,upload_to_s3
-from primary.extract import extract
+from primary.extract import Extract
 
 def fetch_save_upload():
 
@@ -22,10 +21,10 @@ def fetch_save_upload():
     current=start_date
     while current<=end_date:
 
-        self=extract(current)
-        qs=self.fetch_1days_questions(tag)
-        filepath=self.save_raw_questions(qs,tag)
-        self.upload_to_s3(filepath,tag)
+        extractor=Extract(current,tag)
+        qs=extractor.fetch_1days_questions()
+        filepath=extractor.save_raw_questions(qs)
+        extractor.upload_to_s3(filepath)
 
         current+=timedelta(days=1)
 

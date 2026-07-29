@@ -18,7 +18,7 @@ SITE.max_pages=15
 
 client=boto3.client('s3')
 
-class extract:
+class Extract:
 
     def __init__(self,day0,tag,backfill=False):
 
