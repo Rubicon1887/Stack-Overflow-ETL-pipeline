@@ -17,10 +17,10 @@ def fetch_save_upload():
     tag='python'
     yesterday=datetime.now(timezone.utc).date()-timedelta(days=1)
 
-    extractor=Extract(yesterday,tag)
-    qs=extractor.fetch_1days_questions()
-    filepath=extractor.save_raw_questions(qs)
-    extractor.upload_to_s3(filepath)
+    extractor=Extract(tag)
+    qs=extractor.fetch_1days_questions(yesterday)
+    filepath=extractor.save_raw_questions(yesterday,qs)
+    extractor.upload_to_s3(yesterday,filepath)
 
 
 if __name__=='__main__':

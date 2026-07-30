@@ -14,17 +14,19 @@ from primary.extract import Extract
 
 def fetch_save_upload():
 
+    # tags=['python','java','javascript','typescript','c#']
     tag='python'
-    start_date=date(2026,7,5)
-    end_date=date(2026,7,10) # inclusive
+    start_date=date(2026,6,1)
+    end_date=date(2026,6,30) # inclusive
+
+    extractor=Extract(tag,backfill=True)
 
     current=start_date
     while current<=end_date:
-
-        extractor=Extract(current,tag)
-        qs=extractor.fetch_1days_questions()
-        filepath=extractor.save_raw_questions(qs)
-        extractor.upload_to_s3(filepath)
+    
+        qs=extractor.fetch_1days_questions(current)
+        # filepath=extractor.save_raw_questions(qs)
+        # extractor.upload_to_s3(filepath)
 
         current+=timedelta(days=1)
 
