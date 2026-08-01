@@ -15,8 +15,8 @@ from primary.extract import Extract
 def fetch_save_upload():
 
     tags=['python','java','javascript','typescript','c#']
-    start_date=date(2022,1,1)
-    end_date=date(2024,12,31) # inclusive
+    start_date=date(2021,1,1)
+    end_date=date(2021,12,31) # inclusive
 
     extractor=Extract(backfill=True)
 

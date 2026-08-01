@@ -14,13 +14,15 @@ from primary.extract import Extract
 
 def fetch_save_upload():
 
-    tag='python'
+    tags=['python','java','javascript','typescript','c#']
     yesterday=datetime.now(timezone.utc).date()-timedelta(days=1)
 
-    extractor=Extract(tag)
-    qs=extractor.fetch_1days_questions(yesterday)
-    filepath=extractor.save_raw_questions(yesterday,qs)
-    extractor.upload_to_s3(yesterday,filepath)
+    extractor=Extract()
+
+    for tag in tags:
+        qs=extractor.fetch_1days_questions(yesterday,tag)
+        filepath=extractor.save_raw_questions(yesterday,tag,qs)
+        extractor.upload_to_s3(yesterday,tag,filepath)
 
 
 if __name__=='__main__':

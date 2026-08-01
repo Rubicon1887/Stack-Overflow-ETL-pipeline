@@ -71,8 +71,7 @@ class Extract:
         if not self.backfill: print(colored(f'4 - Uploaded {day0} file to s3://{bucket_name}/{key}','magenta'))
 
 # may wanna print tag somewhere
-# add functionality to add questions with other tags
-# try backfilling for a month, then maybe a year, account for multiple programming languages
+# try backfilling for a month, then maybe a year
 # maybe add a method to check quota
 # the print statements could be in daily.py/backfill.py
 # dictionary for tags
