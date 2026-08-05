@@ -52,7 +52,7 @@ class Extract:
         return filepath
 
     # upload LOCAL json to S3
-    def upload_to_S3(self,day0,tag,filepath):
+    def upload_to_S3(self,day0,tag,file):
 
         key=(
             f'raw/'
@@ -62,7 +62,10 @@ class Extract:
             f'{tag}_questions.json'
         )
 
-        self.client.upload_file(filepath,bucket_name,key)
+        if type(file)is bytes:
+            self.client.put_object(Body=file,Bucket=bucket_name,Key=key)
+        else:
+            self.client.upload_file(Filename=file,Bucket=bucket_name,Key=key)
 
         return bucket_name,key
 

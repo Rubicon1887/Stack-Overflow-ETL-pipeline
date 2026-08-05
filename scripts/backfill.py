@@ -19,6 +19,9 @@ def fetch_save_upload():
         start_date=date.fromisoformat(f.read())
     end_date=date(2020,12,31) # inclusive
 
+    # start_date=date(2026,8,1)
+    # end_date=date(2026,8,2)
+
     extractor=Extract()
 
     print(colored(f'Starting backfill at {start_date}.','yellow'))
@@ -27,10 +30,11 @@ def fetch_save_upload():
 
         for tag in tags:
             qs=extractor.fetch_1days_questions(current,tag)
-            filepath=extractor.save_raw_questions(current,tag,qs)
-            extractor.upload_to_S3(current,tag,filepath)
+            # filepath=extractor.save_raw_questions(current,tag,qs)
+            json_data=json.dumps(qs,indent=2).encode('utf-8')
+            extractor.upload_to_S3(current,tag,json_data)
 
-        if qs['quota_remaining']<100:
+        if qs['quota_remaining']<1:
 
             with open(r'scripts\stop_date.txt','w') as f:
                 f.write(current.isoformat())
@@ -44,4 +48,4 @@ def fetch_save_upload():
 if __name__=='__main__':
     fetch_save_upload()
 
-# TODO: populate start_date from a .txt file that keeps the last run's last populated date before requests ran out
+# TODO: pass arguments as keyowrd argments for readability

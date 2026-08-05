@@ -25,12 +25,16 @@ def fetch_save_upload():
         qs=extractor.fetch_1days_questions(yesterday,tag)
         print(colored(f'2 - Successfully fetched {len(qs['items'])} questions','green'))
 
-        filepath=extractor.save_raw_questions(yesterday,tag,qs)
-        print(colored(f'3 - Saved {yesterday} data to {filepath}','blue'))
+        # filepath=extractor.save_raw_questions(yesterday,tag,qs)
+        # print(colored(f'3 - Saved {yesterday} data to {filepath}','blue'))
 
-        bucket_name,key=extractor.upload_to_S3(yesterday,tag,filepath)
+        json_data=json.dumps(qs,indent=2).encode('utf-8')
+
+        bucket_name,key=extractor.upload_to_S3(yesterday,tag,json_data)
         print(colored(f'4 - Uploaded {yesterday} file to s3://{bucket_name}/{key}','magenta'))
 
 
 if __name__=='__main__':
     fetch_save_upload()
+
+# TODO: pass arguments as keyowrd argments for readability
