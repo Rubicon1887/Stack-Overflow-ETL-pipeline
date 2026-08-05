@@ -22,7 +22,7 @@ def fetch_save_upload():
     for tag in tags:
         qs=extractor.fetch_1days_questions(yesterday,tag)
         filepath=extractor.save_raw_questions(yesterday,tag,qs)
-        extractor.upload_to_s3(yesterday,tag,filepath)
+        extractor.upload_to_S3(yesterday,tag,filepath)
 
 
 if __name__=='__main__':

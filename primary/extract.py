@@ -57,7 +57,7 @@ class Extract:
         return filepath
 
     # upload LOCAL json to S3
-    def upload_to_s3(self,day0,tag,filepath):
+    def upload_to_S3(self,day0,tag,filepath):
 
         key=(
             f'raw/'
@@ -71,9 +71,10 @@ class Extract:
         if not self.backfill: print(colored(f'4 - Uploaded {day0} file to s3://{bucket_name}/{key}','magenta'))
 
 # may wanna print tag somewhere
-# try backfilling for a month, then maybe a year
 # maybe add a method to check quota
 # the print statements could be in daily.py/backfill.py
 # dictionary for tags
-# modify daily.py, change passed arguments
 # If I run the backfill in batches, maybe there could be a method that shows the quota used up and the quota left, and maybe the time elapsed
+
+# TODO: docker-compose.yml postgres's credentials
+# TODO: change/add a method (put_object) to upload jsons directly to S3 after fetching. Idea - skip save_raw_questions(), alter upload_to_S3()'s behavior based on whether it receives a filepath or dict with questions

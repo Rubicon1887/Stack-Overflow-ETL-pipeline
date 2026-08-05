@@ -10,3 +10,5 @@ cnxn=psycopg.connect(
 print('Connected')
 
 cnxn.close()
+
+# TODO: Cree a SQL file to create postgres tables
