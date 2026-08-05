@@ -33,3 +33,5 @@ def fetch_save_upload():
 
 if __name__=='__main__':
     fetch_save_upload()
+
+# TODO: populate start_date from a .txt file that keeps the last run's last populated date before requests ran out

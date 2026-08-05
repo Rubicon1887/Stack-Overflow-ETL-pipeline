@@ -20,9 +20,16 @@ def fetch_save_upload():
     extractor=Extract()
 
     for tag in tags:
+
+        print(colored(f'1 - Fetching Stack Overflow questions from {yesterday} tagged with {tag}','yellow'))
         qs=extractor.fetch_1days_questions(yesterday,tag)
+        print(colored(f'2 - Successfully fetched {len(qs['items'])} questions','green'))
+
         filepath=extractor.save_raw_questions(yesterday,tag,qs)
-        extractor.upload_to_S3(yesterday,tag,filepath)
+        print(colored(f'3 - Saved {yesterday} data to {filepath}','blue'))
+
+        bucket_name,key=extractor.upload_to_S3(yesterday,tag,filepath)
+        print(colored(f'4 - Uploaded {yesterday} file to s3://{bucket_name}/{key}','magenta'))
 
 
 if __name__=='__main__':
