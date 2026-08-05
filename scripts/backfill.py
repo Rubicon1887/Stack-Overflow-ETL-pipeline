@@ -30,7 +30,7 @@ def fetch_save_upload():
             filepath=extractor.save_raw_questions(current,tag,qs)
             extractor.upload_to_S3(current,tag,filepath)
 
-        if qs['quota_remaining']<5000:
+        if qs['quota_remaining']<100:
 
             with open(r'scripts\stop_date.txt','w') as f:
                 f.write(current.isoformat())

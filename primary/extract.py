@@ -66,9 +66,6 @@ class Extract:
 
         return bucket_name,key
 
-# maybe add a method to check quota
 # dictionary for tags
-# If I run the backfill in batches, maybe there could be a method that shows the quota used up and the quota left, and maybe the time elapsed
 
 # TODO: change/add a method (put_object) to upload jsons directly to S3 after fetching. Idea - skip save_raw_questions(), alter upload_to_S3()'s behavior based on whether it receives a filepath or dict with questions
-# TODO: the print statements could be in backfill.py
