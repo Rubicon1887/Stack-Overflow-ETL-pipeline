@@ -15,11 +15,13 @@ from primary.extract import Extract
 def fetch_save_upload():
 
     tags=['python','java','javascript','typescript','c#']
-    start_date=date(2014,5,29)
-    end_date=date(2014,12,31) # inclusive
+    with open(r'scripts\stop_date.txt','r') as f:
+        start_date=date.fromisoformat(f.read())
+    end_date=date(2020,12,31) # inclusive
 
-    extractor=Extract(backfill=True)
+    extractor=Extract()
 
+    print(colored(f'Starting backfill at {start_date}.','yellow'))
     current=start_date
     while current<=end_date:
 
@@ -27,6 +29,14 @@ def fetch_save_upload():
             qs=extractor.fetch_1days_questions(current,tag)
             filepath=extractor.save_raw_questions(current,tag,qs)
             extractor.upload_to_S3(current,tag,filepath)
+
+        if qs['quota_remaining']<5000:
+
+            with open(r'scripts\stop_date.txt','w') as f:
+                f.write(current.isoformat())
+            print(colored(f'Stopping backfill at {current}. Quota remaining - {qs['quota_remaining']}','red'))
+
+            break
 
         current+=timedelta(days=1)
 
