@@ -72,3 +72,5 @@ class Extract:
 # dictionary for tags
 
 # TODO: change/add a method (put_object) to upload jsons directly to S3 after fetching. Idea - skip save_raw_questions(), alter upload_to_S3()'s behavior based on whether it receives a filepath or dict with questions
+# TODO: fields I want - question_id,tags,owner.reputation,owner.display_name,is_answered,view_count,answer_count,score
+# TODO: rename extract to something else because it does more than extract, it also loads

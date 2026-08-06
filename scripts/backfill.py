@@ -34,7 +34,7 @@ def fetch_save_upload():
             json_data=json.dumps(qs,indent=2).encode('utf-8')
             extractor.upload_to_S3(current,tag,json_data)
 
-        if qs['quota_remaining']<1:
+        if qs['quota_remaining']<300:
 
             with open(r'scripts\stop_date.txt','w') as f:
                 f.write(current.isoformat())

@@ -11,4 +11,4 @@ print('Connected')
 
 cnxn.close()
 
-# TODO: Cree a SQL file to create postgres tables
+#TODO: this module/script (what makes more sense?) will be responsible for loading S3 data into postgres
