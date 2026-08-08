@@ -33,7 +33,7 @@ class StackOverflowPipeline:
 
         return qs
 
-    # save json LOCALLY
+    # save LOCALLY as json
     def save_raw_questions(self,day0,tag,qs):
 
         path=Path(
@@ -51,7 +51,7 @@ class StackOverflowPipeline:
 
         return filepath
 
-    # upload LOCAL json to S3
+    # upload LOCAL jsons to S3/in-memory data to S3 as json
     def upload_to_S3(self,day0,tag,file):
 
         key=(
@@ -69,6 +69,5 @@ class StackOverflowPipeline:
 
         return bucket_name,key
 
-# dictionary for tags
 
-# TODO: rename extract to something else because it does more than extract, it also loads
+# dictionary for tags

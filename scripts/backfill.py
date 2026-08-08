@@ -27,8 +27,8 @@ def fetch_save_upload():
     print(colored(f'Starting backfill at {start_date}.','yellow'))
     current=start_date
     while current<=end_date:
-
         for tag in tags:
+            
             qs=pipeline.fetch_1days_questions(current,tag)
             # filepath=pipeline.save_raw_questions(current,tag,qs)
             json_data=json.dumps(qs,indent=2).encode('utf-8')
