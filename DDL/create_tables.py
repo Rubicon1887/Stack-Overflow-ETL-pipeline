@@ -42,5 +42,3 @@ if __name__=='__main__':
 
 
 # TODO: Load data into the table
-# TODO: The table should be a "question-level" table. It needs to have a date as well
-# TODO: question_id is a primary key. If a questions appears in both python and java questions, it'll appear twice. Something else needs to be a primary key. or do I just not make it a primary key?

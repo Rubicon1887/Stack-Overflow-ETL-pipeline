@@ -12,7 +12,7 @@ load_dotenv()
 api_key=os.getenv('STACK_API_KEY')
 bucket_name=os.getenv('S3_BUCKET_NAME')
 
-class Extract:
+class StackOverflowPipeline:
 
     def __init__(self):
 

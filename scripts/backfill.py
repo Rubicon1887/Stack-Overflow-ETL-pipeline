@@ -10,7 +10,7 @@ import boto3
 import sys
 sys.path.append('./')
 
-from primary.extract import Extract
+from primary.pipeline import StackOverflowPipeline
 
 def fetch_save_upload():
 
@@ -22,17 +22,17 @@ def fetch_save_upload():
     # start_date=date(2026,8,1)
     # end_date=date(2026,8,2)
 
-    extractor=Extract()
+    pipeline=StackOverflowPipeline()
 
     print(colored(f'Starting backfill at {start_date}.','yellow'))
     current=start_date
     while current<=end_date:
 
         for tag in tags:
-            qs=extractor.fetch_1days_questions(current,tag)
-            # filepath=extractor.save_raw_questions(current,tag,qs)
+            qs=pipeline.fetch_1days_questions(current,tag)
+            # filepath=pipeline.save_raw_questions(current,tag,qs)
             json_data=json.dumps(qs,indent=2).encode('utf-8')
-            extractor.upload_to_S3(current,tag,json_data)
+            pipeline.upload_to_S3(current,tag,json_data)
 
         if qs['quota_remaining']<1000:
 
