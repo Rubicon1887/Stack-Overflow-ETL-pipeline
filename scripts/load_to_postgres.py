@@ -1,45 +1,69 @@
 import boto3
-from datetime import date
+from datetime import date,timedelta
 from dotenv import load_dotenv
 import os
 import json
+import psycopg
 
 load_dotenv()
 
 client=boto3.client('s3')
-tags=['python','java','javascript','typescript','c#']
+languages=['python','java','javascript','typescript','c#']
+cnxn_params={
+    'host':os.getenv('DB_HOST'),
+    'dbname':os.getenv('POSTGRES_DB'),
+    'user':os.getenv('POSTGRES_USER'),
+    'password':os.getenv('POSTGRES_PASSWORD')
+}
 
 def load_to_db():
 
-    start_date=date(2021,8,18)
-    # end_date=date(2016,12,31)
-    end_date=date(2021,8,19)
+    start_date=date(2013,1,1)
+    end_date=date(2013,12,31)
 
     current=start_date
-    while current<=end_date:
-        for tag in tags:
 
-            key=(
-                f'raw/'
-                f'{current.year}/'
-                f'{current.month:02d}/'
-                f'{current.day:02d}/'
-                f'{tag}_questions.json'
-            )
+    with psycopg.connect(**cnxn_params) as cnxn:
+        with cnxn.cursor() as cur:
+            with cur.copy('COPY public.questions (question_id,programming_language,tags,owner_id,owner_reputation,owner_name,is_answered,view_count,closed_date,answer_count,score,question_date) FROM STDIN') as copy:
 
-            obj=client.get_object(Bucket=os.getenv('S3_BUCKET_NAME',Key=key))
-            data=obj['Body'].read().decode('utf-8')
-            qs=json.loads(data)['items']
+                while current<=end_date:
+                    for language in languages:
 
-            question_id bigint NOT NULL,
-                    programming_language varchar NULL,
-                    tags _varchar NULL,
-                    owner_id bigint NULL,
-                    owner_reputation bigint NULL,
-                    owner_name varchar NULL,
-                    is_answered boolean NULL,
-                    view_count bigint NULL,
-                    closed_date bigint NULL,
-                    answer_count bigint NULL,
-                    score bigint NULL,
-                    question_date date NULL,
+                        key=(
+                            f'raw/'
+                            f'{current.year}/'
+                            f'{current.month:02d}/'
+                            f'{current.day:02d}/'
+                            f'{language}_questions.json'
+                        )
+
+                        obj=client.get_object(Bucket=os.getenv('S3_BUCKET_NAME'),Key=key)
+                        data=obj['Body'].read().decode('utf-8')
+                        qs=json.loads(data)['items']
+
+                        for q in qs:
+
+                            question_id=q['question_id']
+                            programming_language=language
+                            tags=q['tags']
+                            owner_id=q['owner'].get('user_id')
+                            owner_reputation=q['owner'].get('reputation')
+                            owner_name=q['owner'].get('display_name')
+                            is_answered=q['is_answered']
+                            view_count=q['view_count']
+                            closed_date=q.get('closed_date')
+                            answer_count=q['answer_count']
+                            score=q['score']
+                            question_date=current
+
+                            copy.write_row((question_id,programming_language,tags,owner_id,owner_reputation,owner_name,is_answered,view_count,closed_date,answer_count,score,question_date))
+
+                    current+=timedelta(days=1)
+
+
+if __name__=='__main__':
+    load_to_db()
+               
+
+# TODO: Add upload date to table

@@ -38,3 +38,4 @@ if __name__=='__main__':
     fetch_save_upload()
 
 # TODO: pass arguments as keyword argments for readability
+# change tag/tags to language/languages
