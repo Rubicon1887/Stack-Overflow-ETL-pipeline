@@ -69,6 +69,6 @@ def truncate_questions_table():
 
 if __name__=='__main__':
 
+    delete_questions_table()
     create_questions_table()
-    # delete_questions_table()
     # truncate_questions_table()
