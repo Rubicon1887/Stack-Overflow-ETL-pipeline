@@ -14,28 +14,25 @@ from primary.pipeline import StackOverflowPipeline
 
 def fetch_save_upload():
 
-    tags=['python','java','javascript','typescript','c#']
+    languages=['python','java','javascript','typescript','c#']
     yesterday=datetime.now(timezone.utc).date()-timedelta(days=1)
 
     pipeline=StackOverflowPipeline()
 
-    for tag in tags:
+    for lang in languages:
 
-        print(colored(f'1 - Fetching Stack Overflow questions from {yesterday} tagged with {tag}','yellow'))
-        qs=pipeline.fetch_1days_questions(yesterday,tag)
+        print(colored(f'1 - Fetching Stack Overflow questions from {yesterday} tagged with {lang}','yellow'))
+        qs=pipeline.fetch_1days_questions(day0=yesterday,lang=lang)
         print(colored(f'2 - Successfully fetched {len(qs['items'])} questions','green'))
 
-        # filepath=pipeline.save_raw_questions(yesterday,tag,qs)
+        # filepath=pipeline.save_raw_questions(day0=yesterday,lang=lang,qs=qs)
         # print(colored(f'3 - Saved {yesterday} data to {filepath}','blue'))
 
         json_data=json.dumps(qs,indent=2).encode('utf-8')
 
-        bucket_name,key=pipeline.upload_to_S3(yesterday,tag,json_data)
+        bucket_name,key=pipeline.upload_to_S3(day0=yesterday,lang=lang,file=json_data)
         print(colored(f'4 - Uploaded {yesterday} file to s3://{bucket_name}/{key}','magenta'))
 
 
 if __name__=='__main__':
     fetch_save_upload()
-
-# TODO: pass arguments as keyword argments for readability
-# change tag/tags to language/languages

@@ -22,19 +22,19 @@ class StackOverflowPipeline:
 
         self.client=boto3.client('s3')
     
-    def fetch_1days_questions(self,day0,tag):
+    def fetch_1days_questions(self,day0,lang):
 
         day1=day0+timedelta(days=1)
 
         fromdate=int(datetime.combine(day0,time.min,tzinfo=timezone.utc).timestamp())
         todate=int(datetime.combine(day1,time.min,tzinfo=timezone.utc).timestamp())
 
-        qs=self.SITE.fetch('questions',fromdate=fromdate,todate=todate,tagged=tag)
+        qs=self.SITE.fetch('questions',fromdate=fromdate,todate=todate,tagged=lang)
 
         return qs
 
     # save LOCALLY as json
-    def save_raw_questions(self,day0,tag,qs):
+    def save_raw_questions(self,day0,lang,qs):
 
         path=Path(
             r'C:\Users\athar\Documents\GitHub\personal project\Stack Overflow ETL pipeline\S3 data',
@@ -44,7 +44,7 @@ class StackOverflowPipeline:
         )
 
         path.mkdir(parents=True,exist_ok=True)
-        filepath=path/f'{tag}_questions.json'
+        filepath=path/f'{lang}_questions.json'
 
         with open(filepath,'w',encoding='utf-8') as f:
             json.dump(qs,f,indent=2)
@@ -52,19 +52,19 @@ class StackOverflowPipeline:
         return filepath
 
     # upload LOCAL jsons to S3/in-memory data to S3 as json
-    def upload_to_S3(self,day0,tag,file):
+    def upload_to_S3(self,day0,lang,file):
 
         key=(
             f'raw/'
             f'{day0.year}/'
             f'{day0.month:02d}/'
             f'{day0.day:02d}/'
-            f'{tag}_questions.json'
+            f'{lang}_questions.json'
         )
 
         if type(file)is bytes:
             self.client.put_object(Body=file,Bucket=bucket_name,Key=key)
-        else:
+        else: # file is filepath and saved locally
             self.client.upload_file(Filename=file,Bucket=bucket_name,Key=key)
 
         return bucket_name,key

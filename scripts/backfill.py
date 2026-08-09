@@ -14,7 +14,7 @@ from primary.pipeline import StackOverflowPipeline
 
 def fetch_save_upload():
 
-    tags=['python','java','javascript','typescript','c#']
+    languages=['python','java','javascript','typescript','c#']
     with open(r'scripts\stop_date.txt','r') as f:
         start_date=date.fromisoformat(f.read())
     end_date=date(2020,12,31) # inclusive
@@ -27,14 +27,14 @@ def fetch_save_upload():
     print(colored(f'Starting backfill at {start_date}.','yellow'))
     current=start_date
     while current<=end_date:
-        for tag in tags:
-            
-            qs=pipeline.fetch_1days_questions(current,tag)
-            # filepath=pipeline.save_raw_questions(current,tag,qs)
-            json_data=json.dumps(qs,indent=2).encode('utf-8')
-            pipeline.upload_to_S3(current,tag,json_data)
+        for lang in languages:
 
-        if qs['quota_remaining']<1000:
+            qs=pipeline.fetch_1days_questions(day0=current,lang=lang)
+            # filepath=pipeline.save_raw_questions(day0=current,lang=lang,qs=qs)
+            json_data=json.dumps(qs,indent=2).encode('utf-8')
+            pipeline.upload_to_S3(day0=current,lang=lang,file=json_data)
+
+        if qs['quota_remaining']<100:
 
             with open(r'scripts\stop_date.txt','w') as f:
                 f.write(current.isoformat())
