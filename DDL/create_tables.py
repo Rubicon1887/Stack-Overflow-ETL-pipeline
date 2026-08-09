@@ -1,8 +1,16 @@
 import psycopg
 from dotenv import load_dotenv
 import os
+from termcolor import colored
 
 load_dotenv()
+
+cnxn_params={
+    'host':os.getenv('DB_HOST'),
+    'dbname':os.getenv('POSTGRES_DB'),
+    'user':os.getenv('POSTGRES_USER'),
+    'password':os.getenv('POSTGRES_PASSWORD')
+}
 
 def create_questions_table():
 
@@ -25,20 +33,41 @@ def create_questions_table():
     );
     """
 
-    cnxn_params={
-        'host':os.getenv('DB_HOST'),
-        'dbname':os.getenv('POSTGRES_DB'),
-        'user':os.getenv('POSTGRES_USER'),
-        'password':os.getenv('POSTGRES_PASSWORD')
-    }
-
     with psycopg.connect(**cnxn_params) as cnxn:
         with cnxn.cursor() as cur:
             cur.execute(sql)
 
+    print(colored('CREATED TABLE public.questions','blue'))
+
+
+def delete_questions_table():
+
+    sql="""
+    DROP TABLE IF EXISTS public.questions
+    """
+
+    with psycopg.connect(**cnxn_params) as cnxn:
+            with cnxn.cursor() as cur:
+                cur.execute(sql)
+
+    print(colored('DELETED TABLE public.questions','blue'))
+
+
+def truncate_questions_table():
+
+    sql="""
+    TRUNCATE TABLE public.questions
+    """
+
+    with psycopg.connect(**cnxn_params) as cnxn:
+            with cnxn.cursor() as cur:
+                cur.execute(sql)
+
+    print(colored('PURGED TABLE public.questions','blue'))
+
 
 if __name__=='__main__':
+
     create_questions_table()
-
-
-# TODO: Load data into the table
+    # delete_questions_table()
+    # truncate_questions_table()
