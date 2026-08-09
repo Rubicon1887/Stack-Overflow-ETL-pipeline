@@ -29,6 +29,7 @@ def create_questions_table():
         answer_count bigint NULL,
         score bigint NULL,
         question_date date NULL,
+        upload_timestamp timestamp with time zone NULL,
         CONSTRAINT questions_pk PRIMARY KEY (question_id, programming_language)
     );
     """

@@ -1,5 +1,5 @@
 import boto3
-from datetime import date,timedelta
+from datetime import date,timedelta,datetime,timezone
 from dotenv import load_dotenv
 import os
 import json
@@ -18,14 +18,16 @@ cnxn_params={
 
 def load_to_db():
 
+    utc_timestamp_now=datetime.now(timezone.utc)
+
     start_date=date(2013,1,1)
-    end_date=date(2013,12,31)
+    end_date=date(2013,1,1)
 
     current=start_date
 
     with psycopg.connect(**cnxn_params) as cnxn:
         with cnxn.cursor() as cur:
-            with cur.copy('COPY public.questions (question_id,programming_language,tags,owner_id,owner_reputation,owner_name,is_answered,view_count,closed_date,answer_count,score,question_date) FROM STDIN') as copy:
+            with cur.copy('COPY public.questions (question_id,programming_language,tags,owner_id,owner_reputation,owner_name,is_answered,view_count,closed_date,answer_count,score,question_date,upload_timestamp) FROM STDIN') as copy:
 
                 while current<=end_date:
                     for language in languages:
@@ -56,8 +58,9 @@ def load_to_db():
                             answer_count=q['answer_count']
                             score=q['score']
                             question_date=current
+                            upload_timestamp=utc_timestamp_now
 
-                            copy.write_row((question_id,programming_language,tags,owner_id,owner_reputation,owner_name,is_answered,view_count,closed_date,answer_count,score,question_date))
+                            copy.write_row((question_id,programming_language,tags,owner_id,owner_reputation,owner_name,is_answered,view_count,closed_date,answer_count,score,question_date,upload_timestamp))
 
                     current+=timedelta(days=1)
 
@@ -66,5 +69,4 @@ if __name__=='__main__':
     load_to_db()
                
 
-# TODO: Add upload date to table
 # TODO: since this loading action needs to be performed for both the backfill and new daily questions, shall I have it be in primary and call in scripts here? db_backfill.py and db_daily.py
