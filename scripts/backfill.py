@@ -15,12 +15,13 @@ from primary.pipeline import StackOverflowPipeline
 def fetch_save_upload():
 
     languages=['python','java','javascript','typescript','c#']
-    with open(r'scripts\stop_date.txt','r') as f:
-        start_date=date.fromisoformat(f.read())
-    end_date=date(2020,12,31) # inclusive
 
-    # start_date=date(2026,8,1)
-    # end_date=date(2026,8,2)
+    # with open(r'scripts\stop_date.txt','r') as f:
+    #     start_date=date.fromisoformat(f.read())
+    # end_date=date(2020,12,31) # inclusive
+
+    start_date=date(2026,7,25)
+    end_date=date(2026,7,31)
 
     pipeline=StackOverflowPipeline()
 
@@ -44,6 +45,12 @@ def fetch_save_upload():
 
         current+=timedelta(days=1)
 
+    if current==end_date+timedelta(days=1):
+        print(colored(f'Completed backfill until {current}. Quota remaining - {qs['quota_remaining']}','green'))
+
 
 if __name__=='__main__':
     fetch_save_upload()
+
+
+# backfill complete from 2008 to July 31st, 2026

@@ -20,8 +20,8 @@ def load_to_db():
 
     utc_timestamp_now=datetime.now(timezone.utc)
 
-    start_date=date(2015,1,1)
-    end_date=date(2018,12,31)
+    start_date=date(2019,1,1)
+    end_date=date(2026,7,31)
 
     current=start_date
 
