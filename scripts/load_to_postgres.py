@@ -20,14 +20,15 @@ def load_to_db():
 
     utc_timestamp_now=datetime.now(timezone.utc)
 
-    start_date=date(2019,1,1)
-    end_date=date(2026,7,31)
+    start_date=date(2008,1,1)
+    end_date=date(2010,12,31) # for now, let the backfill end on 2026,7,31
 
     current=start_date
 
     with psycopg.connect(**cnxn_params) as cnxn:
         with cnxn.cursor() as cur:
-            with cur.copy('COPY public.questions (question_id,programming_language,tags,owner_id,owner_reputation,owner_name,is_answered,view_count,closed_date,answer_count,score,question_date,upload_timestamp) FROM STDIN') as copy:
+            with cur.copy('COPY public.questions (question_id,programming_language,tags,owner_id,owner_reputation,owner_name,is_answered,view_count,closed_unix_timestamp,answer_count,score,'
+                          'creation_unix_timestamp,question_date,upload_timestamp) FROM STDIN') as copy:
 
                 while current<=end_date:
                     for language in languages:
@@ -54,13 +55,14 @@ def load_to_db():
                             owner_name=q['owner'].get('display_name')
                             is_answered=q['is_answered']
                             view_count=q['view_count']
-                            closed_date=q.get('closed_date')
+                            closed_unix_timestamp=q.get('closed_date') # the json payload carries Unix timestamps (seconds since the Unix epoch)
                             answer_count=q['answer_count']
                             score=q['score']
+                            creation_unix_timestamp=q['creation_date']
                             question_date=current
                             upload_timestamp=utc_timestamp_now
 
-                            copy.write_row((question_id,programming_language,tags,owner_id,owner_reputation,owner_name,is_answered,view_count,closed_date,answer_count,score,question_date,upload_timestamp))
+                            copy.write_row((question_id,programming_language,tags,owner_id,owner_reputation,owner_name,is_answered,view_count,closed_unix_timestamp,answer_count,score,creation_unix_timestamp,question_date,upload_timestamp))
 
                     current+=timedelta(days=1)
 

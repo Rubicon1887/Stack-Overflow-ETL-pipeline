@@ -25,9 +25,10 @@ def create_questions_table():
         owner_name varchar NULL,
         is_answered boolean NULL,
         view_count bigint NULL,
-        closed_date bigint NULL,
+        closed_unix_timestamp bigint NULL,
         answer_count bigint NULL,
         score bigint NULL,
+        creation_unix_timestamp bigint NULL,
         question_date date NULL,
         upload_timestamp timestamp with time zone NULL,
         CONSTRAINT questions_pk PRIMARY KEY (question_id, programming_language)
@@ -74,7 +75,8 @@ if __name__=='__main__':
     # truncate_questions_table()
 
 
-# TODO: convert closed_date to actual date
+# TODO: convert closed_date to actual date (dbt)
 # TODO: also keep the creation_date (which is actually a timestamp)
 # TODO: question_day_of_week
 # TODO: closed_date -> null/not null is_closed
+# TODO: closed_date and creation_date from the json payload are both Unix timestamps
