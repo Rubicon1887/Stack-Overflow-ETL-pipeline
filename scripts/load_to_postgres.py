@@ -69,4 +69,5 @@ if __name__=='__main__':
     load_to_db()
                
 
-# TODO: since this loading action needs to be performed for both the backfill and new daily questions, shall I have it be in primary and call in scripts here? db_backfill.py and db_daily.py
+# TODO: since this loading action needs to be performed for both the backfill and new daily questions, shall I have it be in primary and call in scripts here? 
+# db_backfill.py and db_daily.py

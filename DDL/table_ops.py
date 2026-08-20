@@ -72,3 +72,9 @@ if __name__=='__main__':
     delete_questions_table()
     create_questions_table()
     # truncate_questions_table()
+
+
+# TODO: convert closed_date to actual date
+# TODO: also keep the creation_date (which is actually a timestamp)
+# TODO: question_day_of_week
+# TODO: closed_date -> null/not null is_closed
