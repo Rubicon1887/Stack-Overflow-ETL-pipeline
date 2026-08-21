@@ -75,8 +75,4 @@ if __name__=='__main__':
     # truncate_questions_table()
 
 
-# TODO: convert closed_date to actual date (dbt)
-# TODO: also keep the creation_date (which is actually a timestamp)
-# TODO: question_day_of_week
-# TODO: closed_date -> null/not null is_closed
-# TODO: closed_date and creation_date from the json payload are both Unix timestamps
+# TODO: convert closed_date to actual date (dbt), question_day_of_week, closed_date -> null/not null is_closed
