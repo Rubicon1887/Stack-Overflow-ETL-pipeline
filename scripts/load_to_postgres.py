@@ -27,8 +27,8 @@ def load_to_db():
 
     with psycopg.connect(**cnxn_params) as cnxn:
         with cnxn.cursor() as cur:
-            with cur.copy('COPY public.questions (question_id,programming_language,tags,owner_id,owner_reputation,owner_name,is_answered,view_count,closed_unix_timestamp,answer_count,score,'
-                          'creation_unix_timestamp,question_date,upload_timestamp) FROM STDIN') as copy:
+            with cur.copy('COPY public.questions (question_id,language,tags,user_id,reputation,display_name,is_answered,view_count,closed_date,answer_count,score,'
+                          'creation_date,current,utc_timestamp_now) FROM STDIN') as copy:
 
                 while current<=end_date:
                     for language in languages:
@@ -74,11 +74,11 @@ if __name__=='__main__':
 # TODO: since this loading action needs to be performed for both the backfill and new daily questions, shall I have it be in primary and call in scripts here? 
 # db_backfill.py and db_daily.py
 
-programming_language
-owner_id
-owner_reputation
-owner_name
-closed_unix_timestamp
-creation_unix_timestamp
-question_date
-upload_timestamp
+# language -> programming_language
+# user_id -> owner_id
+# reputation -> owner_reputation
+# display_name -> owner_name
+# closed_date -> closed_unix_timestamp
+# creation_date -> creation_unix_timestamp
+# current -> question_date
+# utc_timestamp_now -> upload_timestamp

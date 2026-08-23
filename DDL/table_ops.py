@@ -18,19 +18,19 @@ def create_questions_table():
     sql="""
     CREATE TABLE public.questions (
         question_id bigint NOT NULL,
-        programming_language varchar NULL,
+        language varchar NULL,
         tags _varchar NULL,
-        owner_id bigint NULL,
-        owner_reputation bigint NULL,
-        owner_name varchar NULL,
+        user_id bigint NULL,
+        reputation bigint NULL,
+        display_name varchar NULL,
         is_answered boolean NULL,
         view_count bigint NULL,
-        closed_unix_timestamp bigint NULL,
+        closed_date bigint NULL,
         answer_count bigint NULL,
         score bigint NULL,
-        creation_unix_timestamp bigint NULL,
-        question_date date NULL,
-        upload_timestamp timestamp with time zone NULL,
+        creation_date bigint NULL,
+        current date NULL,
+        utc_timestamp_now timestamp with time zone NULL,
         CONSTRAINT questions_pk PRIMARY KEY (question_id, programming_language)
     );
     """
