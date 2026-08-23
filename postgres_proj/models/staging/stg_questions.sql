@@ -1,16 +1,16 @@
-select 
+SELECT 
     question_id,
-    programming_language,
+    "language" as programming_language,
     tags,
-    owner_id,
-    owner_reputation,
-    owner_name,
+    user_id as owner_id,
+    reputation as owner_reputation,
+    display_name as owner_name,
     is_answered,
     view_count,
-    closed_unix_timestamp,
+    closed_date as closed_unix_timestamp,
     answer_count,
     score,
-    creation_unix_timestamp,
-    question_date,
-    upload_timestamp
-from questions
+    creation_date as creation_unix_timestamp,
+    "current" as question_date,
+    utc_timestamp_now as upload_timestamp
+FROM {{source('stackoverflow','questions')}}
