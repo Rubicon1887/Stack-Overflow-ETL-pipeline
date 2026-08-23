@@ -48,21 +48,21 @@ def load_to_db():
                         for q in qs:
 
                             question_id=q['question_id']
-                            programming_language=language
+                            # language
                             tags=q['tags']
-                            owner_id=q['owner'].get('user_id')
-                            owner_reputation=q['owner'].get('reputation')
-                            owner_name=q['owner'].get('display_name')
+                            user_id=q['owner'].get('user_id')
+                            reputation=q['owner'].get('reputation')
+                            display_name=q['owner'].get('display_name')
                             is_answered=q['is_answered']
                             view_count=q['view_count']
-                            closed_unix_timestamp=q.get('closed_date') # the json payload carries Unix timestamps (seconds since the Unix epoch)
+                            closed_date=q.get('closed_date') # the json payload carries Unix timestamps (seconds since the Unix epoch)
                             answer_count=q['answer_count']
                             score=q['score']
-                            creation_unix_timestamp=q['creation_date']
-                            question_date=current
-                            upload_timestamp=utc_timestamp_now
+                            creation_date=q['creation_date']
+                            # current
+                            # utc_timestamp_now
 
-                            copy.write_row((question_id,programming_language,tags,owner_id,owner_reputation,owner_name,is_answered,view_count,closed_unix_timestamp,answer_count,score,creation_unix_timestamp,question_date,upload_timestamp))
+                            copy.write_row((question_id,language,tags,user_id,reputation,display_name,is_answered,view_count,closed_date,answer_count,score,creation_date,current,utc_timestamp_now))
 
                     current+=timedelta(days=1)
 
@@ -73,3 +73,12 @@ if __name__=='__main__':
 
 # TODO: since this loading action needs to be performed for both the backfill and new daily questions, shall I have it be in primary and call in scripts here? 
 # db_backfill.py and db_daily.py
+
+programming_language
+owner_id
+owner_reputation
+owner_name
+closed_unix_timestamp
+creation_unix_timestamp
+question_date
+upload_timestamp
