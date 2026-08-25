@@ -76,3 +76,4 @@ if __name__=='__main__':
 
 
 # TODO: convert closed_date to actual date (dbt), question_day_of_week, closed_date -> null/not null is_closed
+# TODO: throw in days_to_close while you're at it
