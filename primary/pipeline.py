@@ -71,3 +71,4 @@ class StackOverflowPipeline:
 
 
 # dictionary for tags
+# split postgres table by tags
