@@ -1,3 +1,5 @@
+{{ config(schema='staging')}}
+
 SELECT 
     question_id,
     "language" as programming_language,
@@ -13,4 +15,4 @@ SELECT
     creation_date as creation_unix_timestamp,
     "current" as question_date,
     utc_timestamp_now as upload_timestamp
-FROM {{source('stackoverflow','questions')}}
+FROM {{ source('stackoverflow','questions') }}

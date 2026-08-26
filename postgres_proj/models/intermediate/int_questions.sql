@@ -1,3 +1,5 @@
+{{ config(schema='intermediate') }}
+
 with questions as (
     SELECT 
         question_id,
@@ -24,3 +26,5 @@ SELECT
     extract(day from creation_timestamp) as question_day,
     extract(dow from creation_timestamp) as question_dow
 FROM questions
+
+-- TODO: have a schema each for staging, intermediate, and marts
