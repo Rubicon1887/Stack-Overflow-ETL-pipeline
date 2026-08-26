@@ -1,4 +1,4 @@
-{{ config(schema='staging')}}
+{{ config(schema='staging') }}
 
 SELECT 
     question_id,
