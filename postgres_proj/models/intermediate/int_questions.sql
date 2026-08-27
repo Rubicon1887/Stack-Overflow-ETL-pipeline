@@ -1,6 +1,6 @@
 {{ config(schema='intermediate') }}
 
-with questions as (
+WITH questions AS (
     SELECT 
         question_id,
         programming_language,
@@ -10,21 +10,22 @@ with questions as (
         owner_name,
         is_answered,
         view_count,
-        to_timestamp(closed_unix_timestamp) as closed_timestamp,
+        to_timestamp(closed_unix_timestamp) AS closed_timestamp,
+        (closed_unix_timestamp IS NOT NULL) AS is_closed,
         answer_count,
         score,
-        to_timestamp(creation_unix_timestamp) as creation_timestamp,
-        to_timestamp(creation_unix_timestamp)::date as question_date,
+        TO_TIMESTAMP(creation_unix_timestamp) AS creation_timestamp,
+        TO_TIMESTAMP(creation_unix_timestamp)::DATE AS question_date,
         upload_timestamp
-    FROM {{ref('stg_questions')}}
+    FROM {{ ref('stg_questions') }}
 )
 
 SELECT
     *,
-    extract(year from creation_timestamp) as question_year,
-    extract(month from creation_timestamp) as question_month,
-    extract(day from creation_timestamp) as question_day,
-    extract(dow from creation_timestamp) as question_dow
+    extract(year FROM creation_timestamp) AS question_year,
+    extract(month FROM creation_timestamp) AS question_month,
+    extract(day FROM creation_timestamp) AS question_day,
+    extract(dow FROM creation_timestamp) AS question_dow
 FROM questions
 
--- TODO: have a schema each for staging, intermediate, and marts
+-- TODO: may add days_to_close

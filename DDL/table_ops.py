@@ -73,7 +73,3 @@ if __name__=='__main__':
     delete_questions_table()
     create_questions_table()
     # truncate_questions_table()
-
-
-# TODO: convert closed_date to actual date (dbt), question_day_of_week, closed_date -> null/not null is_closed
-# TODO: throw in days_to_close while you're at it
