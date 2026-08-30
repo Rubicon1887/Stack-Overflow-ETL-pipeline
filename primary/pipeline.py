@@ -21,7 +21,8 @@ class StackOverflowPipeline:
         self.SITE.max_pages=15
 
         self.client=boto3.client('s3')
-    
+
+    # Stack Overflow -> python variable qs (memory) through the API
     def fetch_1days_questions(self,day0,lang):
 
         day1=day0+timedelta(days=1)
@@ -33,7 +34,7 @@ class StackOverflowPipeline:
 
         return qs
 
-    # save LOCALLY as json
+    # save LOCALLY as json - unused
     def save_raw_questions(self,day0,lang,qs):
 
         path=Path(

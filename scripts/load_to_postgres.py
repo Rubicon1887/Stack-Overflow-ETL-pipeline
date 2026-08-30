@@ -74,11 +74,8 @@ if __name__=='__main__':
 # TODO: since this loading action needs to be performed for both the backfill and new daily questions, shall I have it be in primary and call in scripts here? 
 # db_backfill.py and db_daily.py
 
-# language -> programming_language
-# user_id -> owner_id
-# reputation -> owner_reputation
-# display_name -> owner_name
-# closed_date -> closed_unix_timestamp
-# creation_date -> creation_unix_timestamp
-# current -> question_date
-# utc_timestamp_now -> upload_timestamp
+# TODO: compartmentalize the actions in load_to_db(), separate them out into a function to generate rows from S3, and another with the connection, cursor, copy, and date loop.
+# This should be resuable for a backfill and a daily job
+
+# However, the load_to_postgres script is separate from the the backfill script ON PURPOSE, because while the API has a quota, S3 doesn't, so this script isn't restricted to working
+# on 2 years' data at a time, unlike backfill.py. So I only need to worry about integrating it in the daily.py script, NOT backfill.py.
