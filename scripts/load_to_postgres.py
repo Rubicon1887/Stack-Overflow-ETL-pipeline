@@ -21,7 +21,7 @@ def load_to_db():
     utc_timestamp_now=datetime.now(timezone.utc)
 
     start_date=date(2011,1,1)
-    end_date=date(2026,7,31) # for now, let the backfill end on 2026,7,31
+    end_date=date(2026,7,31)
 
     current=start_date
 
@@ -59,7 +59,7 @@ def load_to_db():
                             answer_count=q['answer_count']
                             score=q['score']
                             creation_date=q['creation_date']
-                            # current
+                            # current # the question date
                             # utc_timestamp_now
 
                             copy.write_row((question_id,language,tags,user_id,reputation,display_name,is_answered,view_count,closed_date,answer_count,score,creation_date,current,utc_timestamp_now))
@@ -79,3 +79,6 @@ if __name__=='__main__':
 
 # However, the load_to_postgres script is separate from the the backfill script ON PURPOSE, because while the API has a quota, S3 doesn't, so this script isn't restricted to working
 # on 2 years' data at a time, unlike backfill.py. So I only need to worry about integrating it in the daily.py script, NOT backfill.py.
+
+# differences between backfill load and the daily load - 
+# language loop, start and end dates, s3 key, get_object()

@@ -6,11 +6,19 @@ import os
 from pathlib import Path
 import json
 import boto3
+import psycopg
 
 load_dotenv()
 
 api_key=os.getenv('STACK_API_KEY')
 bucket_name=os.getenv('S3_BUCKET_NAME')
+
+cnxn_params={
+    'host':os.getenv('DB_HOST'),
+    'dbname':os.getenv('POSTGRES_DB'),
+    'user':os.getenv('POSTGRES_USER'),
+    'password':os.getenv('POSTGRES_PASSWORD')
+}
 
 class StackOverflowPipeline:
 
@@ -21,6 +29,8 @@ class StackOverflowPipeline:
         self.SITE.max_pages=15
 
         self.client=boto3.client('s3')
+
+        self.utc_timestamp_now=datetime.now(timezone.utc)
 
     # Stack Overflow -> python variable qs (memory) through the API
     def fetch_1days_questions(self,day0,lang):
@@ -69,6 +79,32 @@ class StackOverflowPipeline:
             self.client.upload_file(Filename=file,Bucket=bucket_name,Key=key)
 
         return bucket_name,key
+
+    def load_to_db(self,day0,lang,qs):
+
+        with psycopg.connect(**cnxn_params) as cnxn:
+            with cnxn.cursor() as cur:
+                with cur.copy('COPY public.questions (question_id,language,tags,user_id,reputation,display_name,is_answered,view_count,closed_date,answer_count,score,'
+                            'creation_date,current,utc_timestamp_now) FROM STDIN') as copy:     
+
+                    for q in qs:
+                        
+                        question_id=q['question_id']
+                        language=lang
+                        tags=q['tags']
+                        user_id=q['owner'].get('user_id')
+                        reputation=q['owner'].get('reputation')
+                        display_name=q['owner'].get('display_name')
+                        is_answered=q['is_answered']
+                        view_count=q['view_count']
+                        closed_date=q.get('closed_date') # the json payload carries Unix timestamps (seconds since the Unix epoch)
+                        answer_count=q['answer_count']
+                        score=q['score']
+                        creation_date=q['creation_date']
+                        current=day0 # question date
+                        utc_timestamp_now=self.utc_timestamp_now
+
+                        copy.write_row((question_id,language,tags,user_id,reputation,display_name,is_answered,view_count,closed_date,answer_count,score,creation_date,current,utc_timestamp_now))                       
 
 
 # dictionary for tags

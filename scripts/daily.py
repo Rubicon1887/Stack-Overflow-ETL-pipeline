@@ -33,6 +33,11 @@ def fetch_save_upload():
         bucket_name,key=pipeline.upload_to_S3(day0=yesterday,lang=lang,file=json_data)
         print(colored(f'4 - Uploaded {yesterday} file to s3://{bucket_name}/{key}','magenta'))
 
+        # Here, I want to load questions from qs['items'] to postgres
+        print(colored(f'5 - Loading rows to postgres','cyan'))
+        pipeline.load_to_db(day0=yesterday,lang=lang,qs=qs['items'])
+        print(colored(f'6 - Successfully loaded {len(qs['items'])} to postgres','blue'))
+
 
 if __name__=='__main__':
     fetch_save_upload()
