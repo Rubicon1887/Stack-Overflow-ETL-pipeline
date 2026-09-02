@@ -44,3 +44,4 @@ if __name__=='__main__':
 
 
 # TODO: rename qs variable to better represent that it is the whole JSON payload, and not just the list of questions
+# This script gets turned into a DAG so we can benefit from Airflow instead of the DAG calling only daily.py

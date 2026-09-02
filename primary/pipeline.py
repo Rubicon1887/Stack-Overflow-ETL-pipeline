@@ -63,7 +63,7 @@ class StackOverflowPipeline:
         return filepath
 
     # upload LOCAL jsons to S3/in-memory data to S3 as json
-    def upload_to_S3(self,day0,lang,file):
+    def upload_to_S3(self,day0,lang,file): # TODO: make this load_to_S3
 
         key=(
             f'raw/'

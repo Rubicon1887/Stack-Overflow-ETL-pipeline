@@ -12,3 +12,5 @@ SELECT
     SUM(question_count) OVER(PARTITION BY question_year) AS year_total,
     ROUND(question_count/SUM(question_count) OVER(PARTITION BY question_year)*100,2) AS pct_share
 FROM year_counts
+
+-- TODO: add a model that deals specifically with 2026, to observe if the daily job works
