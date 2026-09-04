@@ -5,5 +5,6 @@
 *.session.sql
 *.txt
 *.pbix
+*.log
 
 !requirements.txt
