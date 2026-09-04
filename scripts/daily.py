@@ -45,3 +45,17 @@ if __name__=='__main__':
 
 # TODO: rename qs variable to better represent that it is the whole JSON payload, and not just the list of questions
 # This script gets turned into a DAG so we can benefit from Airflow instead of the DAG calling only daily.py
+
+I have an ELT pipeline that extracts data from an API, loads it to S3 and postgres running in a Docker container. The functionality and logic and functions are in a module pipeline.py and a script called daily.py calls 
+those functions. A rough layout of daily.py is - 
+
+languages=['python','java','c#','javascript','typescript']
+pipeline=StackOverflowPipeline()
+
+for lang in languages:
+    qs=pipeline.fetch_questions(lang)
+    pipeline.upload_to_S3(lang,qs)
+    pipeline.upload_to_postgres(lang,qs)
+
+How do I use Airflow to orchestrate this? I'd like to stick with the Taskflow paradigm. Is it a good idea to use Airflow through Docker? pipeline.py is in a folder "primary" inside my project folder '
+'"Stack Overflow ELT pipeline. daily.py is in a folder "scripts". In the project folder, there is also a folder named "docker" which has the docker-compose.yml file for postgres.
