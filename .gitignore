@@ -6,5 +6,6 @@
 *.txt
 *.pbix
 *.log
+logs/
 
 !requirements.txt

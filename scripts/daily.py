@@ -57,5 +57,6 @@ for lang in languages:
     pipeline.upload_to_S3(lang,qs)
     pipeline.upload_to_postgres(lang,qs)
 
-How do I use Airflow to orchestrate this? I'd like to stick with the Taskflow paradigm. Is it a good idea to use Airflow through Docker? pipeline.py is in a folder "primary" inside my project folder '
-'"Stack Overflow ELT pipeline. daily.py is in a folder "scripts". In the project folder, there is also a folder named "docker" which has the docker-compose.yml file for postgres.
+How do I use Airflow to orchestrate this? I'd like to stick with the Taskflow paradigm. Is it a good idea to use Airflow through Docker? pipeline.py is in a folder "primary" inside my project folder
+"Stack Overflow ELT pipeline". daily.py is in a folder "scripts". In the project folder, there is also a folder named "docker" which has the docker-compose.yml file for postgres. I understand that it is a
+good idea to rewrite daily.py as an Airflow dag.
